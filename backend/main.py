@@ -4,8 +4,8 @@ import datetime
 
 
 # Leer el archivo CSV con low_memory=False
-dataset = pd.read_csv('..\\backend\\data\\movies_final.csv', low_memory=False)
-df_actor_and_director = pd.read_csv('..\\backend\\data\\credits_final.csv', low_memory=False)
+dataset = pd.read_csv('https://github.com/martinushinahu/deploy_api/blob/main/backend/data/movies_final.csv', low_memory=False)
+df_actor_and_director = pd.read_csv('https://github.com/martinushinahu/deploy_api/blob/main/backend/data/credits_final.csv', low_memory=False)
 
 
 
