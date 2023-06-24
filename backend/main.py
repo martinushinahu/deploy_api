@@ -1,11 +1,19 @@
 from fastapi import FastAPI
 import pandas as pd
 import datetime
+import os
 
+# Obtener la ruta absoluta del directorio actual
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Leer el archivo CSV con low_memory=False
-dataset = pd.read_csv('https://github.com/martinushinahu/deploy_api/blob/main/backend/data/movies_final.csv', low_memory=False)
-df_actor_and_director = pd.read_csv('https://github.com/martinushinahu/deploy_api/blob/main/backend/data/credits_final.csv', low_memory=False)
+# Construir la ruta absoluta de los archivos de datos
+movies_file = os.path.join(base_dir, 'data', 'movies_final.csv')
+credits_file = os.path.join(base_dir, 'data', 'credits_final.csv')
+
+# Leer los archivos CSV
+dataset = pd.read_csv(movies_file, low_memory=False)
+df_actor_and_director = pd.read_csv(credits_file, low_memory=False)
+
 
 
 
