@@ -9,6 +9,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 
+# Crear la aplicación FastAPI
+app = FastAPI()
+
 # Obtener la ruta absoluta del directorio actual
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -68,8 +71,7 @@ def contar_peliculas_mes(mes):
 
 
 
-# Crear la aplicación FastAPI
-app = FastAPI()
+
 
 # Endpoint para obtener la cantidad de películas estrenadas en un mes
 @app.get('/cantidad_filmaciones_mes')
