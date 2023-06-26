@@ -1,7 +1,13 @@
 from fastapi import FastAPI
 import pandas as pd
-import datetime
 import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from pydantic import BaseModel
+from fastapi import HTTPException, Query
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 
 # Obtener la ruta absoluta del directorio actual
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -214,3 +220,68 @@ def get_director(nombre_director):
 def obtener_info_director(nombre_director: str):
     resultado = get_director(nombre_director)
     return resultado
+
+
+'''proceso de machine learning'''
+
+# Preprocesar los datos y obtener la matriz de características TF-IDF
+tfidf = TfidfVectorizer(stop_words='english')
+dataset['overview'] = dataset['overview'].fillna('')
+tfidf_matrix = tfidf.fit_transform(dataset['overview'])
+# Calcular la similitud coseno entre las películas
+cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+
+
+'''MachineLearnig'''
+
+# Función para obtener las películas recomendadas
+def obtener_recomendaciones(titulo, cosine_sim, movies_data):
+    indices = pd.Series(movies_data.index, index=movies_data['title']).drop_duplicates()
+    idx = indices[titulo]
+
+    scores = list(enumerate(cosine_sim[idx]))
+    scores = sorted(scores, key=lambda x: x[1], reverse=True)
+    top_indices = [i[0] for i in scores[1:6]]
+    recomendaciones = movies_data['title'].iloc[top_indices].tolist()
+
+    return recomendaciones
+
+class TituloPelicula(BaseModel):
+    titulo: str
+
+@app.get('/recomendar_peliculas')
+def recomendar_peliculas(titulo_pelicula: str = Query(..., description='Título de la película')):
+    if titulo_pelicula in dataset['title'].values:
+        recomendaciones = obtener_recomendaciones(titulo_pelicula, cosine_sim, dataset)
+        return {
+            'titulo_pelicula': titulo_pelicula,
+            'recomendaciones': recomendaciones
+        }
+    else:
+        raise HTTPException(status_code=404, detail='La película no fue encontrada en la base de datos.')
+
+
+
+# Ruta estática para los archivos CSS
+static_dir = os.path.join(os.getcwd(), "style")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+images_dir = os.path.join(os.getcwd(),  "img")
+app.mount("/img", StaticFiles(directory=images_dir), name="images")
+
+@app.get("/", response_class=HTMLResponse)
+def read_index():
+    with open(os.path.join(os.getcwd(),  "templates", "index.html"), "r", encoding="utf-8") as file:
+        content = file.read()
+    return content
+
+'''
+cantidad_filmaciones_mes?mes={mes}
+cantidad_filmaciones_dia?ia={dia}
+score_titulo?titulo_de_la_filmacion={titulo}
+votos_titulo?titulo_de_la_filmacion={titulo}
+get_actor?nombre_actor={nombre_actor}
+get_director?nombre_director={nombre_director}
+recomendar_peliculas?titulo_pelicula=
+'''

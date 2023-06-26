@@ -1,0 +1,26 @@
+movies_id	budget	original_language	overview	popularity	production_companies	production_countries	release_date	revenue	runtime	status	tagline	title	vote_average	vote_count	collection_id	collection_name	genres	iso_639_1	name	release_year	return
+
+
+movies_id	department	name_crew	gender_crew	job	name_cast	order	gender_cast	character_cast
+
+
+cantidad_filmaciones_mes?mes={mes}
+*Cantidad de filmaciones por mes --> Ingresar Mes
+
+cantidad_filmaciones_dia?ia={dia}
+*Cantidad de Filmaciones  por día -->Ingresar Día
+
+score_titulo?titulo_de_la_filmacion={titulo}
+Score por Filmación --> Seleccionar Peliculas
+
+votos_titulo?titulo_de_la_filmacion={titulo}
+votos por Filamción --> Seleccionar pelicula
+
+get_actor?nombre_actor={nombre_actor}
+Participación del Actor --> Seleccionar Actor
+
+get_director?nombre_director={nombre_director}
+Peliculas que a dirigido el director --> selecciona Director
+
+recomendar_peliculas?titulo_pelicula=
+Recomendación de Peliculas -->> selecciona una Pelicula

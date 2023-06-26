@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>API de Recomendación de Películas</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css?v=1">
+</head>
+<body> 
+      
+    <div class="title">
+        <h1>API de Recomendación de Películas</h1>
+    </div>
+      
+    <div class="container">
+        <div class="form-box">            
+    <form id="formulario-cantidad-filmaciones" action="/cantidad_filmaciones_mes" method="get">
+        <label for="mes">Cantidad de filmaciones por mes *Ingresar Mes*:</label>
+        <input type="text" id="mes" name="mes" required>
+        <input type="submit" value="Consultar">
+    </form>
+        
+    <form id="formulario-cantidad-filmaciones-dia" onsubmit="obtenerCantidadFilmacionesDia(event)">
+        <label for="dia">Cantidad de Filmaciones  por día *Ingresar Día*:</label>
+        <input type="text" id="dia" name="dia" required>
+        <input type="submit" value="Consultar">
+    </form>  
+    <form id="formulario-score-titulo" onsubmit="obtenerScoreTitulo(event)">
+        <label for="titulo">Score por filmación *Ingresar Película*:</label>
+        <input type="text" id="titulo" name="titulo" required>
+        <input type="submit" value="Consultar">
+    </form>  
+    <form id="formulario-votos-titulo" onsubmit="obtenerVotosTitulo(event)">
+        <label for="titulo">Votos por Filamción *Ingresar Película*:</label>
+        <input type="text" id="titulo" name="titulo" required>
+        <input type="submit" value="Consultar">
+    </form>
+       
+    <form id="formulario-get-actor" onsubmit="obtenerParticipacionActor(event)">
+        <label for="nombreActor">Participaciónes del actor *Ingresar Actor*:</label>
+        <input type="text" id="nombreActor" name="nombreActor" required>
+        <input type="submit" value="Consultar">
+    </form>
+       
+    <form id="formulario-get-director" onsubmit="obtenerPeliculasDirector(event)">
+        <label for="nombreDirector">Peliculas que a dirigido el director *Ingresar Director*:</label>
+        <input type="text" id="nombreDirector" name="nombreDirector" required>
+        <input type="submit" value="Consultar">
+    </form>
+    
+       
+    <form id="formulario-recomendar-peliculas" onsubmit="obtenerRecomendaciones(event)">
+        <label for="tituloPelicula">Recomendación de peliculas Ingresar Película:</label>
+        <input type="text" id="tituloPelicula" name="tituloPelicula" required>
+        <input type="submit" value="Consultar">
+    </form>
+        </div>
+    </div>    
+          
+    <div class="result-box">
+        <textarea id="resultado" rows="10" cols="50" readonly></textarea>
+    </div>
+
+    <script>
+        document.getElementById("formulario-cantidad-filmaciones").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de mes
+            var mes = document.getElementById("mes").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/cantidad_filmaciones_mes?mes=" + mes, true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        });
+
+        function obtenerCantidadFilmacionesDia(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de día
+            var dia = document.getElementById("dia").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/cantidad_filmaciones_dia?dia=" + dia, true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        }
+
+        function obtenerScoreTitulo(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de título
+            var titulo = document.getElementById("titulo").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/score_titulo?titulo_de_la_filmacion=" + encodeURIComponent(titulo), true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        }
+
+        function obtenerVotosTitulo(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de título
+            var titulo = document.getElementById("titulo").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/votos_titulo?titulo_de_la_filmacion=" + encodeURIComponent(titulo), true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        }
+
+        function obtenerParticipacionActor(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de nombre del actor
+            var nombreActor = document.getElementById("nombreActor").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/get_actor?nombre_actor=" + encodeURIComponent(nombreActor), true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        }
+
+        function obtenerPeliculasDirector(event) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            // Obtiene el valor ingresado en el campo de nombre del director
+            var nombreDirector = document.getElementById("nombreDirector").value;
+
+            // Realiza una solicitud AJAX al endpoint correspondiente
+            var request = new XMLHttpRequest();
+            request.open("GET", "/get_director?nombre_director=" + encodeURIComponent(nombreDirector), true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                var response = JSON.parse(request.responseText);
+                var message = response.mensaje;
+                document.getElementById("resultado").value = message;
+                } else {
+                    // Maneja el caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Maneja el caso de error si es necesario
+            };
+            request.send();
+        }
+
+        function obtenerRecomendaciones(event) {
+            event.preventDefault();
+
+            var tituloPelicula = document.getElementById("tituloPelicula").value;
+
+            var request = new XMLHttpRequest();
+            request.open("GET", "/recomendar_peliculas?titulo_pelicula=" + encodeURIComponent(tituloPelicula), true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    var response = JSON.parse(request.responseText);
+                    var recomendaciones = response.recomendaciones;
+                    document.getElementById("resultado").value = recomendaciones.join('\n');
+                } else {
+                    // Manejar caso de error si es necesario
+                }
+            };
+            request.onerror = function() {
+                // Manejar caso de error si es necesario
+            };
+            request.send();
+        }
+    </script> 
+    
+    <div class="github-linkedin-container">
+        <figure class="icon-figure">
+          <a href="https://github.com/martinushinahu/deploy_api">
+            <img class="icon-image" src="\img\icons8-github-64.png" alt="Github">
+          </a>
+        </figure>
+        <figure class="icon-figure">
+          <a href="https://www.linkedin.com/in/martin-ushi%C3%B1ahua-quinteros-/">
+            <img class="icon-image" src="\img\linkedin-icon.png" alt="LinkedIn">
+          </a>
+        </figure>
+    </div>
+    
+</body>
+</html>
