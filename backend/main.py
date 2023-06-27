@@ -11,6 +11,17 @@ from fastapi.staticfiles import StaticFiles
 
 # Crear la aplicación FastAPI
 app = FastAPI()
+static_dir = os.path.join(os.getcwd(), "style")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+images_dir = os.path.join(os.getcwd(),  "img")
+app.mount("/img", StaticFiles(directory=images_dir), name="images")
+
+@app.get("/", response_class=HTMLResponse)
+def read_index():
+    with open(os.path.join(os.getcwd(),  "templates", "index.html"), "r", encoding="utf-8") as file:
+        content = file.read()
+    return content
 
 # Obtener la ruta absoluta del directorio actual
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -266,17 +277,9 @@ def recomendar_peliculas(titulo_pelicula: str = Query(..., description='Título 
 
 
 # Ruta estática para los archivos CSS
-static_dir = os.path.join(os.getcwd(), "style")
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
-images_dir = os.path.join(os.getcwd(),  "img")
-app.mount("/img", StaticFiles(directory=images_dir), name="images")
 
-@app.get("/", response_class=HTMLResponse)
-def read_index():
-    with open(os.path.join(os.getcwd(),  "templates", "index.html"), "r", encoding="utf-8") as file:
-        content = file.read()
-    return content
+
 
 '''
 cantidad_filmaciones_mes?mes={mes}
