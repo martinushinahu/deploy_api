@@ -56,7 +56,9 @@ en la caja de la parte de abajo.
   - Votos por filmación: Ingresa un título de película y obtén la cantidad de votos de esa película.
   - Participación del actor: Ingresa el nombre de un actor y obtén las participaciones en películas de ese actor.
   - Películas que ha dirigido el director: Ingresa el nombre de un director y obtén las películas que ha dirigido.
-  - Recomendación de películas: Ingresa el título de una película y obtén una lista de recomendaciones similares.   
+  - Recomendación de películas: Ingresa el título de una película y obtén una lista de recomendaciones similares.
+
+
     
 ## 👥 Contribución
 Las contribuciones son bienvenidas y alentadas! Si deseas contribuir a este proyecto, puedes seguir los siguientes pasos:
@@ -64,11 +66,23 @@ Las contribuciones son bienvenidas y alentadas! Si deseas contribuir a este proy
 1. Haz un fork de este repositorio.
 2. Clona tu repositorio fork en tu máquina local.
 3. Crea una nueva rama para tu contribución:
+     ```shell
+     git checkout -b mi-nueva-funcionalidad
+     
+4. Realiza los cambios necesarios y realiza commits con mensajes descriptivos.
+5. Empuja tus cambios a tu repositorio fork.
    ```shell
-   git checkout -b mi-nueva-funcionalidad
-4.Realiza los cambios necesarios y realiza commits con mensajes descriptivos.
-5.Empuja tus cambios a tu repositorio fork
-   ```shell
-     git push origin mi-nueva-funcional
+   git push origin mi-nueva-funcional
 
+  
 ## 📜 Licencia
+
+
+
+
+
+
+
+
+
+
