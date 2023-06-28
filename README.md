@@ -1,5 +1,5 @@
 #  API de Recomendación de Películas
-Desarrollado por Martin Ushinahua Quinteros
+- Desarrollado por Martin Ushinahua Quinteros.
 Bienvenidos a La API de Recomendación de Películas, esta es una herramienta en un servicio web que te permite obtener recomendaciones de películas basadas en un título de película ingresado.
 Utiliza un algoritmo de similitud coseno para encontrar películas similares y devuelve una lista de recomendaciones.
 Este proyecto es 100% gratuito y de código abierto.
