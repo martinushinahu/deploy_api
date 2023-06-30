@@ -11,17 +11,6 @@ from fastapi.staticfiles import StaticFiles
 
 # Crear la aplicación FastAPI
 app = FastAPI()
-static_dir = os.path.join(os.getcwd(), "style")
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
-images_dir = os.path.join(os.getcwd(),  "img")
-app.mount("/img", StaticFiles(directory=images_dir), name="images")
-
-@app.get("/", response_class=HTMLResponse)
-def read_index():
-    with open(os.path.join(os.getcwd(),  "templates", "index.html"), "r", encoding="utf-8") as file:
-        content = file.read()
-    return content
 
 # Obtener la ruta absoluta del directorio actual
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -149,20 +138,19 @@ def votos_titulo(titulo_de_la_filmacion):
     fila = dataset.loc[dataset['title'] == titulo_de_la_filmacion]
     if fila.empty:
         return {"mensaje": "No se encontró ninguna filmación con ese título"}
-    
+
     votos = int(fila['vote_count'].values[0])
     promedio_votos = fila['vote_average'].values[0]
-    
+
     if votos < 2000:
         return {"mensaje": "La filmación no cumple con la cantidad mínima de valoraciones"}
-    
+
     titulo = fila['title'].values[0]
-    año_estreno = fila['release_year'].values[0]
-    
+
     return {
-        "mensaje": f"La película {titulo} fue estrenada en el año {año_estreno}. "
-                   f"La misma cuenta con un total de {votos} valoraciones, con un promedio de {promedio_votos}."
+        "mensaje": f"La película {titulo} cuenta con un total de {votos} votos y un promedio de {promedio_votos} votos."
     }
+
 
 #Endpointdef votos_titulo( titulo_de_la_filmación ):
 @app.get('/votos_titulo')
@@ -172,8 +160,13 @@ def obtener_votos_titulo(titulo_de_la_filmacion: str):
 
 
 '''5.Continuamos con el Endpoint de get_actores'''
+
 def get_actor(nombre_actor):
-    actor_filmaciones = df_actor_and_director[(df_actor_and_director['name_cast'] == nombre_actor) & (df_actor_and_director['job'] != 'Director')]
+    actor_filmaciones = df_actor_and_director[df_actor_and_director['name_cast'] == nombre_actor]
+    
+    if actor_filmaciones.empty:
+        return {"mensaje": f"No se encontró al actor {nombre_actor} en ninguna filmación."}
+    
     actor_movies_id = actor_filmaciones['movies_id'].tolist()
     actor_peliculas = dataset[dataset['movies_id'].isin(actor_movies_id)]
     cantidad_filmaciones = len(actor_peliculas)
@@ -182,11 +175,13 @@ def get_actor(nombre_actor):
     actor_peliculas['return'] = actor_peliculas['return'].apply(lambda x: float(x) if x.replace('.', '', 1).isdigit() else 0)
     
     retorno_total = actor_peliculas['return'].sum()
-    retorno_promedio = retorno_total / cantidad_filmaciones
+    retorno_promedio = retorno_total / cantidad_filmaciones if cantidad_filmaciones > 0 else 0  
+    retorno_total = round(retorno_total, 2)  # Redondear a 2 decimales
+    retorno_promedio = round(retorno_promedio, 2)  # Redondear a 2 decimales
     
     return {
         "mensaje": f"El actor {nombre_actor} ha participado en {cantidad_filmaciones} filmaciones. "
-                   f"Ha obtenido un retorno total de {retorno_total} con un promedio de {retorno_promedio} por filmación."
+                   f"Ha obtenido un retorno total de ${retorno_total} millones de dólares con un promedio de ${retorno_promedio} millones dólares por filmación."
     }
 
 
@@ -196,6 +191,7 @@ def obtener_info_actor(nombre_actor: str):
     return resultado
 
 '''6.ahora con def get_director( nombre_director )'''
+
 
 def get_director(nombre_director):
     # Filtrar el dataset df_actor_and_director para obtener las filas correspondientes al director
@@ -233,6 +229,7 @@ def get_director(nombre_director):
 def obtener_info_director(nombre_director: str):
     resultado = get_director(nombre_director)
     return resultado
+
 
 
 '''proceso de machine learning'''
@@ -277,9 +274,17 @@ def recomendar_peliculas(titulo_pelicula: str = Query(..., description='Título 
 
 
 # Ruta estática para los archivos CSS
+static_dir = os.path.join(os.getcwd(), "style")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
+images_dir = os.path.join(os.getcwd(),  "img")
+app.mount("/img", StaticFiles(directory=images_dir), name="images")
 
-
+@app.get("/", response_class=HTMLResponse)
+def read_index():
+    with open(os.path.join(os.getcwd(),  "templates", "index.html"), "r", encoding="utf-8") as file:
+        content = file.read()
+    return content
 
 '''
 cantidad_filmaciones_mes?mes={mes}
