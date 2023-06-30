@@ -133,16 +133,17 @@
             request.send();
         }
 
-        function obtenerVotosTitulo(event) {
-            event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
-            // Obtiene el valor ingresado en el campo de título
+        function obtenerVotosTitulo(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+            // Obtener el valor ingresado en el campo de título
             var titulo = document.getElementById("titulo").value;
 
-            // Realiza una solicitud AJAX al endpoint correspondiente
-            var request = new XMLHttpRequest();
-            request.open("GET", "/votos_titulo?titulo_de_la_filmacion=" + encodeURIComponent(titulo), true);
-            request.onload = function() {
+            // Realizar una solicitud AJAX al endpoint correspondiente
+                var request = new XMLHttpRequest();
+                request.open("GET", "/votos_titulo?titulo_de_la_filmacion=" + encodeURIComponent(titulo), true);
+                request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
                 var response = JSON.parse(request.responseText);
                 var message = response.mensaje;
@@ -152,10 +153,11 @@
                 }
             };
             request.onerror = function() {
-                // Maneja el caso de error si es necesario
+                // Manejar el caso de error si es necesario
             };
             request.send();
         }
+
 
         function obtenerParticipacionActor(event) {
             event.preventDefault(); // Evita que el formulario se envíe automáticamente
@@ -181,6 +183,8 @@
             request.send();
         }
 
+
+
         function obtenerPeliculasDirector(event) {
             event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
@@ -192,9 +196,23 @@
             request.open("GET", "/get_director?nombre_director=" + encodeURIComponent(nombreDirector), true);
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
-                var response = JSON.parse(request.responseText);
-                var message = response.mensaje;
-                document.getElementById("resultado").value = message;
+                    var response = JSON.parse(request.responseText);
+                    var director = response.director;
+                    var exito = response.exito;
+                    var peliculas = response.peliculas;
+
+                    var mensaje = "Director: " + director + "\n";
+                    mensaje += "Películas dirigidas:\n";
+                    for (var i = 0; i < peliculas.length; i++) {
+                        var pelicula = peliculas[i];
+                        mensaje += "- Título: " + pelicula.titulo + "\n";
+                        mensaje += "  Fecha de lanzamiento: " + pelicula.fecha_lanzamiento + "\n";
+                        mensaje += "  Retorno individual: " + pelicula.retorno_individual + "\n";
+                        mensaje += "  Costo en dólares: " + pelicula.costo + "\n";
+                        mensaje += "  Ganancia en dólares: " + pelicula.ganancia + "\n";
+                    }
+
+                    document.getElementById("resultado").value = mensaje;
                 } else {
                     // Maneja el caso de error si es necesario
                 }
@@ -203,7 +221,8 @@
                 // Maneja el caso de error si es necesario
             };
             request.send();
-        }
+}
+
 
         function obtenerRecomendaciones(event) {
             event.preventDefault();
